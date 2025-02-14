@@ -12,12 +12,22 @@ import { useWindowSize } from "react-use";
 function Fireworks() {
   const navigate = useNavigate();
   const { width, height } = useWindowSize();
+  const [isHide, setIsHide] = useState(true);
 
   useEffect(() => {
     setTimeout(() => {
-      navigate("/home");
+      setIsHide(false);
     }, 3000);
   }, [navigate]);
+
+  const handleGoHome = () => {
+    navigate("/home");
+    const audio = new Audio("/sound.mp3");
+    audio.play().catch((error) => {
+      console.error("Gagal memutar audio:", error);
+    });
+    audio.loop = true;
+  };
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-black text-white text-4xl font-bold relative">
@@ -26,32 +36,65 @@ function Fireworks() {
         height={height}
         numberOfPieces={600}
         recycle={false}
-        gravity={0.1}
+        gravity={0.05}
         tweenDuration={1000}
       />
       <motion.p
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 0.5 }}
-        className="text-red-500"
+        transition={{ duration: 3 }}
+        className="text-red-500 text-birthday"
       >
         💖 Happy Birthday 💖
       </motion.p>
+
+      <button
+        hidden={isHide}
+        onClick={handleGoHome}
+        className="bg-pink-700 px-3 py-2 rounded-lg mt-10"
+      >
+        NEXT
+      </button>
     </div>
   );
 }
-
+const data = [
+  {
+    imageLink: "/4.jpeg",
+  },
+  {
+    imageLink: "/5.jpeg",
+  },
+  {
+    imageLink: "3.jpeg",
+  },
+  {
+    imageLink: "6.jpeg",
+  },
+  {
+    imageLink: "7.jpeg",
+  },
+  {
+    imageLink: "9.jpeg",
+  },
+  {
+    imageLink: "8.jpeg",
+  },
+  {
+    imageLink: "10.jpeg",
+  },
+  {
+    imageLink: "11.jpeg",
+  },
+];
 function Home() {
   const [showMessage, setShowMessage] = useState(false);
 
   useEffect(() => {
-    const audio = new Audio("/birthday-song.mp3");
-    audio.play();
-    audio.loop = true;
     setTimeout(() => {
       setShowMessage(true);
-    }, 3000);
-  }, []);
+    }, 1000);
+  }, [showMessage]);
 
   return (
     <>
@@ -59,11 +102,11 @@ function Home() {
         {showMessage && (
           <motion.h1
             initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1 }}
+            animate={{ opacity: 100 }}
+            transition={{ duration: 2 }}
             className="text-2xl md:text-6xl font-bold text-red-600 w-full text-center"
           >
-            <p>❤️Risya Ristia Wardah!❤️</p>
+            ❤️Risya Ristia Wardah!❤️
           </motion.h1>
         )}
       </div>
@@ -81,8 +124,28 @@ function Home() {
             selalu bersama, saling mendukung, dan menemani satu sama lain hingga
             usia kita bertambah tua. Aku berjanji akan selalu ada di sampingmu,
             sekarang dan selamanya. Terima kasih sudah menjadi kamu yang luar
-            biasa, yang memberi warna dan cinta dalam hidupku.
+            biasa, yang memberi warna dan cinta dalam hidupku. Maaf selama ini
+            aku masih sering bikin kamu kesel, kecewa, sedih dan lainnya. Mari
+            kita mulai sama sama bangun pondasi yang kuat supaya nanti rumah
+            tangga kita juga makin kuat 💖
           </p>
+        </section>
+        <section className="gallery mt-96">
+          <span className="p-5 text-4xl font-bold ">OUR MEMORY</span>
+          <div className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
+            {data.map(({ imageLink }, index) => (
+              <div key={index}>
+                <img
+                  className="h-40 w-full max-w-full rounded-lg object-cover object-center"
+                  src={imageLink}
+                  alt="gallery-photo"
+                />
+              </div>
+            ))}
+          </div>
+        </section>
+        <section className="mt-10 bg-pink-800 w-full p-2">
+          <span className="text-white font-bold tex-2xl">I LOVE U</span>
         </section>
       </div>
     </>
